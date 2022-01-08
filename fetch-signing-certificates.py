@@ -138,7 +138,7 @@ def fetch_certificates_austria_api(destination_dir: str) -> dict:
     epoc_utc = datetime.utcfromtimestamp(epoc_utc_str // 1000)
     list_timestamp_str = json_data['trustList']['timeStamp']
     list_timestamp = datetime.strptime(list_timestamp_str, '%Y-%m-%dT%H:%M:%S.%f')
-    #list_timestamp = datetime.strptime(list_timestamp_str, '%Y-%m-%dT%H:%M:%S')
+    # list_timestamp = datetime.strptime(list_timestamp_str, '%Y-%m-%dT%H:%M:%S')
     signature_base64 = json_data['trustList']['trustListSignature']
     signature = base64.b64decode(signature_base64)
     list_base64 = json_data['trustList']['trustListContent']
