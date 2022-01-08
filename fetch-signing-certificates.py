@@ -28,7 +28,7 @@ API_COUNTRIES = (API_COUNTRY_AUSTRIA)
 
 API_ENDPOINT_AUSTRIA = "https://greencheck.gv.at/api/masterdata"
 API_ENDPOINT_AUSTRIA_V2 = "https://greencheck.gv.at/api/v2/masterdata"
-API_AUSTRIA_V2_CLIENT_VERSION = "1.10"
+API_AUSTRIA_V2_CLIENT_VERSION = "1.12"
 
 
 def _setup_logger() -> None:
