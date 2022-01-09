@@ -30,6 +30,28 @@ Install them via your distribution or via pip:
 pip install -r requirements.txt
 ```
 
+## (optional) Get a list of trusted signature certificates
+Covid-19 vaccine certificates can be decoded without checking their signatures.
+* If you don't any possibly forged certificate will pass as valid one.
+* If you do, authenticity of issued vaccine certificate can be verified.
+
+Run:
+
+```bash
+./fetch-signing-certificates.py
+```
+
+### Trust-list sources
+All sources are signed to verify data authenticity.
+
+* Austria (the default): https://gruenerpass.gv.at/en/
+  * CBOR2 encoded list: https://dgc-trust.qr.gv.at/trustlist
+  * (previous source) REST API with weird versioning scheme,
+    returning JSON containing COSE-messages used by Austrian mobile app:
+    https://greencheck.gv.at/api/v2/masterdata
+* Sweden:
+  * JWT: https://dgcg.covidbevis.se/tp/trust-list
+
 ## usage
 
 Run:
