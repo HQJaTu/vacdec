@@ -35,24 +35,20 @@ DEFAULT_CERTIFICATE_DB_JSON = 'certs/roots/Digital_Green_Certificate_Signing_Key
 DEFAULT_CERTIFICATE_DIRECTORY = 'certs'
 
 
-def _setup_logger() -> None:
+def _setup_logger(use_debug: bool) -> None:
     log_formatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
     console_handler = logging.StreamHandler(sys.stderr)
     console_handler.setFormatter(log_formatter)
     console_handler.propagate = False
     log = logging.getLogger()
     log.addHandler(console_handler)
-    # log.setLevel(logging.DEBUG)
-    log.setLevel(logging.INFO)
+    if use_debug:
+        log.setLevel(logging.DEBUG)
+    else:
+        log.setLevel(logging.INFO)
 
 
 def find_key(key: KID, certs_dir: str, keys_file: str) -> Optional[cosekey.CoseKey]:
-    if False:
-        # Test read a PEM-key
-        cose_key = read_cosekey_from_pem_file("certs/Finland.pem")
-        # pprint(cose_key)
-        # pprint(cose_key.kid.decode())
-
     key_id_str = key.hex()
     pem_filename = "{}/{}.pem".format(certs_dir, key_id_str)
     log.debug("Check if certificate {} exists.".format(pem_filename))
@@ -188,7 +184,6 @@ def cosekey_from_jwk_dict(jwk_dict: Dict) -> cosekey.CoseKey:
     if jwk_dict["crv"] != "P-256":
         raise ValueError("Only P-256 supported")
 
-    from pprint import pprint
     key = ec2.EC2(
         crv=curves.P256,
         x=cjwt_utils.b64d(jwk_dict["x"].encode()),
@@ -372,7 +367,8 @@ def output_covid_cert_data(cert: dict, human_readable_output: bool, output_json_
                         elif item_key == "mp":
                             data_out["Medicinal product"] = vaccine_products[item[item_key]]
                         elif item_key == "ma":
-                            data_out["Marketing Authorization Holder / Manufacturer"] = vaccine_manufacturers[item[item_key]]
+                            data_out["Marketing Authorization Holder / Manufacturer"] = vaccine_manufacturers[
+                                item[item_key]]
                         elif item_key == "dn":
                             data_out["Dose Number"] = item[item_key]
                         elif item_key == "sd":
@@ -501,9 +497,11 @@ def main() -> None:
                         const=False,
                         dest='output_human_readable',
                         help="Output resulting JSON as raw data.")
+    parser.add_argument('--debug', action="store_true", default=False,
+                        help="Make logging use DEBUG instead of default INFO.")
 
     args = parser.parse_args()
-    _setup_logger()
+    _setup_logger(args.debug)
 
     covid_cert_data = None
     image_file = None
