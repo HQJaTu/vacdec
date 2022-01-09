@@ -49,7 +49,7 @@ All sources are signed to verify data authenticity.
   * (previous source) REST API with weird versioning scheme,
     returning JSON containing COSE-messages used by Austrian mobile app:
     https://greencheck.gv.at/api/v2/masterdata
-* Sweden:
+* Sweden: https://dgcg.covidbevis.se/tp/
   * JWT: https://dgcg.covidbevis.se/tp/trust-list
 
 ## usage
