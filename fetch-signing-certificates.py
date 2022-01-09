@@ -47,7 +47,6 @@ qtgnjRgCIQCZHIHbCvlgg5uL8ZJQzAxLavqF2w6uUxYVrvYDj2Cqjw==
 -----END CERTIFICATE-----
 """
 # Austrian mobile app endpoints:
-API_ENDPOINT_AUSTRIA = "https://greencheck.gv.at/api/masterdata"
 API_ENDPOINT_AUSTRIA_V2 = "https://greencheck.gv.at/api/v2/masterdata"
 API_AUSTRIA_V2_CLIENT_VERSION = "1.12"
 
@@ -183,10 +182,7 @@ def fetch_certificates_austria_api_old(destination_dir: str) -> dict:
     if not sig or not isinstance(sig, Sign1Message):
         raise RuntimeError("Not valid list!")
 
-    at_root_cert_filename = "{}/roots/Austria-prod.pem".format(destination_dir)
-    with open(at_root_cert_filename, "rb") as pem_file:
-        lines = pem_file.read()
-    root_cert = x509.load_pem_x509_certificate(lines)
+    root_cert = x509.load_pem_x509_certificate(TRUST_LIST_AUSTRIA_ROOT_CERT.encode('ascii'))
     root_key = _cert_to_cose_key(root_cert)
     sig.key = root_key
     if not sig.verify_signature():
@@ -246,7 +242,7 @@ def fetch_certificates_austria_api(destination_dir: str) -> dict:
 
 
 def fetch_certificates_sweden_api(destination_dir: str) -> dict:
-    log.debug("Get trust list from Sweden endpoint: {}".format(TRUST_LIST_SWEDEN_SIG_URL))
+    log.debug("Get trust list from Sweden endpoint: {}".format(TRUST_LIST_SWEDEN_URL))
 
     # Step 1:
     # Get the signature key. Public-part.
